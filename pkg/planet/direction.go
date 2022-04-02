@@ -1,4 +1,4 @@
-package world
+package planet
 
 import "errors"
 
@@ -11,18 +11,33 @@ const (
 	West
 )
 
-func (direction Direction) String() (string, error) {
+func (direction Direction) inverse() (inverseDirection Direction, err error) {
 	switch direction {
 	case North:
-		return "north", nil
+		return South, nil
 	case South:
-		return "south", nil
+		return North, nil
 	case East:
-		return "east", nil
+		return West, nil
 	case West:
-		return "west", nil
+		return East, nil
 	}
-	return "", errors.New("Direction is unknown")
+	err = errors.New("Direction is unknown")
+	return
+}
+
+func (direction Direction) toString() string {
+	switch direction {
+	case North:
+		return "north"
+	case South:
+		return "south"
+	case East:
+		return "east"
+	case West:
+		return "west"
+	}
+	return ""
 }
 
 func toDirection(str string) (direction Direction, err error) {

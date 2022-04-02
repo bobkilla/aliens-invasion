@@ -1,4 +1,4 @@
-package world
+package planet
 
 import (
 	"strconv"
@@ -25,7 +25,7 @@ func TestWorldBuilder_when_lines_is_empty(t *testing.T) {
 	lines := []string{}
 
 	//when
-	world := buildWorld(lines)
+	world := BuildWorld(lines)
 
 	//then
 	assert.NotNil(world)
@@ -38,7 +38,7 @@ func TestWorldBuilder_when_line_does_not_contain_any_space(t *testing.T) {
 	lines := []string{"city"}
 
 	//when
-	world := buildWorld(lines)
+	world := BuildWorld(lines)
 
 	//then
 	assert.NotNil(world)
@@ -52,7 +52,7 @@ func TestWorldBuilder_when_line_has_one_neighbour_with_multiple_equal_char(t *te
 	lines := []string{"city north=north=cityName"}
 
 	//when
-	world := buildWorld(lines)
+	world := BuildWorld(lines)
 
 	//then
 	assert.NotNil(world)
@@ -66,7 +66,7 @@ func TestWorldBuilder_when_line_has_one_neighbour_with_unkown_direction(t *testi
 	lines := []string{"city whatever=otherCity"}
 
 	//when
-	world := buildWorld(lines)
+	world := BuildWorld(lines)
 
 	//then
 	assert.NotNil(world)
@@ -81,25 +81,25 @@ func TestWorldBuilder_when_format_is_correct(t *testing.T) {
 	lines := []string{"Foo north=Bar west=Baz south=Qu-ux", "Bar south=Foo west=Bee"}
 
 	//when
-	world := buildWorld(lines)
+	world := BuildWorld(lines)
 
 	//then
 	assert.NotNil(world)
 	assert.Len(world.cities, 5)
 	assertCityHasNeighbours(assert, world, "Foo", map[Direction]string{North: "Bar", West: "Baz", South: "Qu-ux"})
 	assertCityHasNeighbours(assert, world, "Bar", map[Direction]string{South: "Foo", West: "Bee"})
-	assertCityHasNeighbours(assert, world, "Baz", map[Direction]string{})
-	assertCityHasNeighbours(assert, world, "Qu-ux", map[Direction]string{})
-	assertCityHasNeighbours(assert, world, "Bee", map[Direction]string{})
+	assertCityHasNeighbours(assert, world, "Baz", map[Direction]string{East: "Foo"})
+	assertCityHasNeighbours(assert, world, "Qu-ux", map[Direction]string{North: "Foo"})
+	assertCityHasNeighbours(assert, world, "Bee", map[Direction]string{East: "Bar"})
 }
 
 func assertCityHasNeighbours(assert *assert.Assertions, world *World, cityName string, neighbours map[Direction]string) {
-	city, found := world.get(cityName)
+	city, found := world.GetCity(cityName)
 	assert.True(found)
 	assert.NotNil(city)
 
 	for direction, neighbourName := range neighbours {
-		neighbour, found := world.get(neighbourName)
+		neighbour, found := world.GetCity(neighbourName)
 		assert.True(found)
 		assert.NotNil(neighbour)
 		assert.Equal(city.getNeighbour(direction), neighbour)
@@ -107,7 +107,7 @@ func assertCityHasNeighbours(assert *assert.Assertions, world *World, cityName s
 }
 
 func assertCityNotExists(assert *assert.Assertions, world *World, cityName string) {
-	city, found := world.get(cityName)
+	city, found := world.GetCity(cityName)
 	assert.False(found)
 	assert.Nil(city)
 }
