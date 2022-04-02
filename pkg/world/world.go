@@ -5,6 +5,10 @@ type World struct {
 	//aliens     []*Aliens
 }
 
+func newWorld() *World {
+	return &World{cities: make(map[string]*City)}
+}
+
 func (world World) get(cityName string) (city *City, found bool) {
 	if world.cities[cityName] == nil {
 		return nil, false
