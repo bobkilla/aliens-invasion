@@ -14,7 +14,7 @@ func TestFileReader_when_file_does_not_exists(t *testing.T) {
 	fs := fstest.MapFS{}
 
 	//when
-	lines, err := readLinesFromFile(fs, fileName)
+	lines, err := ReadLinesFromFile(fs, fileName)
 
 	//then
 	assert.Nil(lines)
@@ -32,7 +32,7 @@ func TestFileReader(t *testing.T) {
 	}
 
 	//when
-	lines, err := readLinesFromFile(fs, fileName)
+	lines, err := ReadLinesFromFile(fs, fileName)
 
 	//then
 	assert.Nil(err)
