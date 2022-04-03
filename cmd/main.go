@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 
+	"com.invasion/first/pkg/invasion"
 	"com.invasion/first/pkg/io"
 	"com.invasion/first/pkg/planet"
 )
@@ -23,8 +24,10 @@ func main() {
 		return
 	}
 	world := planet.BuildWorld(lines)
-	aliens := planet.InitInvasion(world, nbAliens)
-	planet.Invade(world, aliens)
+	invasion.StartInvasion(world, nbAliens)
+
+	fmt.Println("Here is the result map of the world after the invasion :")
+	fmt.Print(world.ToString())
 }
 
 func getNbAliens(args []string) (nbAliens int, err error) {

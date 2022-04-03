@@ -6,7 +6,7 @@ import (
 )
 
 func BuildWorld(lines []string) *World {
-	world := newWorld()
+	world := NewWorld()
 
 	for _, line := range lines {
 		cityName, neighbours := parseLine(strings.TrimSpace(line))
@@ -26,7 +26,7 @@ func parseLine(line string) (cityName string, neighbours []string) {
 	return
 }
 
-func fillNeighbour(world *World, city *City, neighbour string) {
+func fillNeighbour(world *World, fromCity *City, neighbour string) {
 	splitLine := strings.Split(neighbour, "=")
 	if len(splitLine) != 2 {
 		//we ignore if there is more than one occurence of the char '='
@@ -41,21 +41,25 @@ func fillNeighbour(world *World, city *City, neighbour string) {
 	if err != nil {
 		//we ignore if the direction is not known
 		fmt.Printf("Error while parsing direction, ignoring %s\n", rawDirection)
-	} else {
-		toCity := getOrCreateCity(world, toCityName)
-		city.addNeighbour(direction, toCity)
-		inverseDirection, err := direction.inverse()
-		if err == nil {
-			toCity.addNeighbour(inverseDirection, city)
-		}
+		return
+	}
+
+	toCity := getOrCreateCity(world, toCityName)
+	inverseDirection, err := direction.inverse()
+	if fromCity.GetNeighbour(direction) != nil || toCity.GetNeighbour(inverseDirection) != nil {
+		fmt.Printf("The route between %s and %s is ignored because one (or both) of those cities already have a route using this direction\n", toCityName, fromCity.name)
+	}
+	fromCity.addNeighbour(direction, toCity)
+	if err == nil {
+		toCity.addNeighbour(inverseDirection, fromCity)
 	}
 }
 
 func getOrCreateCity(world *World, cityName string) *City {
 	city, found := world.GetCity(cityName)
 	if !found {
-		city = newCity(cityName)
-		world.add(city)
+		city = NewCity(cityName)
+		world.Add(city)
 	}
 	return city
 }

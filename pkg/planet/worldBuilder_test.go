@@ -102,7 +102,7 @@ func assertCityHasNeighbours(assert *assert.Assertions, world *World, cityName s
 		neighbour, found := world.GetCity(neighbourName)
 		assert.True(found)
 		assert.NotNil(neighbour)
-		assert.Equal(city.getNeighbour(direction), neighbour)
+		assert.Equal(city.GetNeighbour(direction), neighbour)
 	}
 }
 
