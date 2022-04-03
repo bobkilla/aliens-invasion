@@ -75,6 +75,22 @@ func TestWorldBuilder_when_line_has_one_neighbour_with_unkown_direction(t *testi
 	assertCityNotExists(assert, world, "otherCity")
 }
 
+func TestWorldBuilder_should_ignore_route_when_a_route_was_already_specified_for_this_direction(t *testing.T) {
+	//given
+	assert := assert.New(t)
+	lines := []string{"Foo north=Bar", "Baz south=Foo"}
+
+	//when
+	world := BuildWorld(lines)
+
+	//then
+	assert.NotNil(world)
+	assert.Len(world.cities, 3)
+	assertCityHasNeighbours(assert, world, "Foo", map[Direction]string{North: "Bar"})
+	assertCityHasNeighbours(assert, world, "Bar", map[Direction]string{South: "Foo"})
+	assertCityHasNeighbours(assert, world, "Baz", map[Direction]string{})
+}
+
 func TestWorldBuilder_when_format_is_correct(t *testing.T) {
 	//given
 	assert := assert.New(t)

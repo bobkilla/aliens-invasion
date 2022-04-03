@@ -48,7 +48,9 @@ func fillNeighbour(world *World, fromCity *City, neighbour string) {
 	inverseDirection, err := direction.inverse()
 	if fromCity.GetNeighbour(direction) != nil || toCity.GetNeighbour(inverseDirection) != nil {
 		fmt.Printf("The route between %s and %s is ignored because one (or both) of those cities already have a route using this direction\n", toCityName, fromCity.name)
+		return
 	}
+
 	fromCity.addNeighbour(direction, toCity)
 	if err == nil {
 		toCity.addNeighbour(inverseDirection, fromCity)
