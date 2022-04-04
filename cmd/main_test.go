@@ -12,48 +12,52 @@ func Test_should_fail_when_no_argument(t *testing.T) {
 	command := []string{"command"}
 
 	// when
-	result, err := getNbAliens(command)
+	sourceFilePath, nbAliens, err := parseArguments(command)
 
 	// then
-	assert.Equal(result, 0)
-	assert.EqualError(err, "Usage: go run aliens.go NB_OF_ALIENS")
+	assert.Equal(sourceFilePath, "")
+	assert.Equal(nbAliens, 0)
+	assert.EqualError(err, "Usage: go run aliens.go SOURCE_MAP_FILE_PATH NB_OF_ALIENS")
 }
 
 func Test_should_fail_when_too_many_arguments(t *testing.T) {
 	// given
 	assert := assert.New(t)
-	command := []string{"command", "10", "25"}
+	command := []string{"command", "10", "25", "32"}
 
 	// when
-	result, err := getNbAliens(command)
+	sourceFilePath, nbAliens, err := parseArguments(command)
 
 	// then
-	assert.Equal(result, 0)
-	assert.EqualError(err, "Usage: go run aliens.go NB_OF_ALIENS")
+	assert.Equal(sourceFilePath, "")
+	assert.Equal(nbAliens, 0)
+	assert.EqualError(err, "Usage: go run aliens.go SOURCE_MAP_FILE_PATH NB_OF_ALIENS")
 }
 
 func Test_should_fail_when_string_argument_instead_of_int(t *testing.T) {
 	// given
 	assert := assert.New(t)
-	command := []string{"command", "str"}
+	command := []string{"command", "test.txt", "str"}
 
 	// when
-	result, err := getNbAliens(command)
+	sourceFilePath, nbAliens, err := parseArguments(command)
 
 	// then
-	assert.Equal(result, 0)
-	assert.EqualError(err, "Error parsing command line argument. Usage: go run aliens.go NB_OF_ALIENS")
+	assert.Equal(sourceFilePath, "test.txt")
+	assert.Equal(nbAliens, 0)
+	assert.EqualError(err, "Error parsing command line argument. Usage: go run aliens.go SOURCE_MAP_FILE_PATH NB_OF_ALIENS")
 }
 
 func Test_should_return_value(t *testing.T) {
 	// given
 	assert := assert.New(t)
-	command := []string{"command", "40"}
+	command := []string{"command", "test.txt", "40"}
 
 	// when
-	result, err := getNbAliens(command)
+	sourceFilePath, nbAliens, err := parseArguments(command)
 
 	// then
-	assert.Equal(result, 40)
+	assert.Equal(sourceFilePath, "test.txt")
+	assert.Equal(nbAliens, 40)
 	assert.Nil(err)
 }

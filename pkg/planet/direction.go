@@ -4,6 +4,10 @@ import "errors"
 
 type Direction int64
 
+/*
+	Represents all the direction that we want to handle. It is possible to had other direction if needed
+
+*/
 const (
 	North Direction = iota
 	South
@@ -40,8 +44,8 @@ func (direction Direction) toString() string {
 	return ""
 }
 
-func toDirection(str string) (direction Direction, err error) {
-	switch str {
+func toDirection(rawDirection string) (direction Direction, err error) {
+	switch rawDirection {
 	case "north":
 		return North, nil
 	case "south":

@@ -11,6 +11,15 @@ import (
 var randomGenerator *rand.Rand
 var citiesWithAliens map[string]*Alien
 
+/*
+	This simulator will start by an initialisation phase: every alien will be sent to a city.
+	At every point of the simulation, if an alien is sent to a city that already contains an alien,
+	this city will be destroyed just like the two aliens.
+
+	The second phase is the simulation of the invasion. At every iteration, every living alien will
+	move to another city using routes between cities.
+	After 10 000 iterations, the simulation is finished. The aliens probably died of old age at this point.
+*/
 func StartInvasion(world *planet.World, maxAliens int) {
 	initInvasion(world, maxAliens)
 	invade(world)

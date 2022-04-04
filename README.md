@@ -25,6 +25,11 @@ with :
 `SOURCE_MAP_FILE_PATH`: location of the source map file on the disk
 `NB_OF_ALIENS`: number of aliens invading the world
 
+## How to run tests
+```
+$ go test -v ./...
+```
+
 ### Any questions?
 
 Please send me an email, and I will answer quickly.

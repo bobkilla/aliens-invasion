@@ -10,15 +10,24 @@ import (
 	"com.invasion/first/pkg/planet"
 )
 
+/*
+	Main command of this application
+
+	Usage : go run aliens.go SOURCE_MAP_FILE_PATH NB_OF_ALIENS
+
+	SOURCE_MAP_FILE_PATH should be in the same directory as the application
+	NB_OF_ALIENS must be an positive integer
+
+*/
 func main() {
-	nbAliens, err := getNbAliens(os.Args)
+	sourceFilePath, nbAliens, err := parseArguments(os.Args)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	fsProvider := os.DirFS(".")
-	lines, err := io.ReadLinesFromFile(fsProvider, "test.txt")
+	lines, err := io.ReadLinesFromFile(fsProvider, sourceFilePath)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -30,15 +39,16 @@ func main() {
 	fmt.Print(world.ToString())
 }
 
-func getNbAliens(args []string) (nbAliens int, err error) {
-	if len(args) != 2 {
-		err = fmt.Errorf("Usage: go run aliens.go NB_OF_ALIENS")
+func parseArguments(args []string) (sourceFilePath string, nbAliens int, err error) {
+	if len(args) != 3 {
+		err = fmt.Errorf("Usage: go run aliens.go SOURCE_MAP_FILE_PATH NB_OF_ALIENS")
 		return
 	}
-	nbAliens, err = strconv.Atoi(args[1])
+	sourceFilePath = args[1]
+	nbAliens, err = strconv.Atoi(args[2])
 	if err != nil {
-		err = fmt.Errorf("Error parsing command line argument. Usage: go run aliens.go NB_OF_ALIENS")
+		err = fmt.Errorf("Error parsing command line argument. Usage: go run aliens.go SOURCE_MAP_FILE_PATH NB_OF_ALIENS")
 		return
 	}
-	return nbAliens, nil
+	return sourceFilePath, nbAliens, nil
 }

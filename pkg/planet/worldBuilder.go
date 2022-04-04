@@ -5,6 +5,13 @@ import (
 	"strings"
 )
 
+/*
+	This is the world builder. It will create a world that contains cities with its neighbours from a raw line.
+	The format of the raw line is :
+	CITY DIRECTION=ANOTHER_CITY
+
+	A city can have another city on every direction that exists. It is possible to have a city without neighbours.
+*/
 func BuildWorld(lines []string) *World {
 	world := NewWorld()
 
